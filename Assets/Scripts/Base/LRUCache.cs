@@ -66,10 +66,7 @@ public class LRUCache<TKey, TValue>
 
         if (_nodes.Count == _capacity)
         {
-            _nodes.Remove(_tail.key);
-
-            _tail = _tail.prevNode;
-            _tail.nextNode = null;
+            RemoveTail();
         }
 
         _nodes.Add(key, node);
@@ -97,5 +94,13 @@ public class LRUCache<TKey, TValue>
 
             _head = node;
         }
+    }
+
+    private void RemoveTail()
+    {
+        _nodes.Remove(_tail.key);
+
+        _tail = _tail.prevNode;
+        _tail.nextNode = null;
     }
 }
