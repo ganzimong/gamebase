@@ -1,8 +1,8 @@
 using UnityEngine;
 
-
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
+    private const string PrefabRootPath = "";
     private const string SingletonPostfix = "(Singleton)";
     private static T _instance;
 
@@ -12,19 +12,22 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_instance == null)
             {
-                var obj = FindObjectOfType<T>();
-                if (obj != null)
-                {
-                    _instance = obj;
+                var _instance = FindObjectOfType<T>();
 
-                    DontDestroyOnLoad(obj);
-                }
-                else
+                if (_instance == null)
                 {
-                    GameObject newObj = new GameObject(typeof(T).Name + SingletonPostfix, typeof(T));
-                    _instance = newObj.GetComponent<T>();
+                    var prefab = Resources.Load<T>(string.Format("{0}{1}", PrefabRootPath, typeof(T).Name));
+                    if (prefab != null)
+                    {
+                        _instance = Instantiate(prefab);
+                    }
+                    else
+                    {
+                        GameObject newObj = new GameObject(typeof(T).Name + SingletonPostfix, typeof(T));
+                        _instance = newObj.GetComponent<T>();
+                    }
 
-                    DontDestroyOnLoad(newObj);
+                    DontDestroyOnLoad(_instance);
                 }
             }
 
