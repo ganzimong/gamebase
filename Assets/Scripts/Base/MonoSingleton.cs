@@ -12,7 +12,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_instance == null)
             {
-                var _instance = FindObjectOfType<T>();
+                _instance = FindObjectOfType<T>();
 
                 if (_instance == null)
                 {
